@@ -1,209 +1,97 @@
 const CONTRAINER = document.querySelector('.container')
-
-let arr = [
-  [
-    [0, 0],
-    [1, 0],
-    [2, 0],
-    [3, 0],
-    [4, 0],
-    [5, 0],
-    [6, 0],
-    [7, 0],
-    [8, 0],
-    [9, 0],
-  ],
-  [
-    [0, 1],
-    [1, 1],
-    [2, 1],
-    [3, 1],
-    [4, 1],
-    [5, 1],
-    [6, 1],
-    [7, 1],
-    [8, 1],
-    [9, 1],
-  ],
-  [
-    [0, 2],
-    [1, 2],
-    [2, 2],
-    [3, 2],
-    [4, 2],
-    [5, 2],
-    [6, 2],
-    [7, 2],
-    [8, 2],
-    [9, 2],
-  ],
-  [
-    [0, 3],
-    [1, 3],
-    [2, 3],
-    [3, 3],
-    [4, 3],
-    [5, 3],
-    [6, 3],
-    [7, 3],
-    [8, 3],
-    [9, 3],
-  ],
-  [
-    [0, 4],
-    [1, 4],
-    [2, 4],
-    [3, 4],
-    [4, 4],
-    [5, 4],
-    [6, 4],
-    [7, 4],
-    [8, 4],
-    [9, 4],
-  ],
-  [
-    [0, 5],
-    [1, 5],
-    [2, 5],
-    [3, 5],
-    [4, 5],
-    [5, 5],
-    [6, 5],
-    [7, 5],
-    [8, 5],
-    [9, 5],
-  ],
-  [
-    [0, 6],
-    [1, 6],
-    [2, 6],
-    [3, 6],
-    [4, 6],
-    [5, 6],
-    [6, 6],
-    [7, 6],
-    [8, 6],
-    [9, 6],
-  ],
-  [
-    [0, 7],
-    [1, 7],
-    [2, 7],
-    [3, 7],
-    [4, 7],
-    [5, 7],
-    [6, 7],
-    [7, 7],
-    [8, 7],
-    [9, 7],
-  ],
-  [
-    [0, 8],
-    [1, 8],
-    [2, 8],
-    [3, 8],
-    [4, 8],
-    [5, 8],
-    [6, 8],
-    [7, 8],
-    [8, 8],
-    [9, 8],
-  ],
-  [
-    [0, 9],
-    [1, 9],
-    [2, 9],
-    [3, 9],
-    [4, 9],
-    [5, 9],
-    [6, 9],
-    [7, 9],
-    [8, 9],
-    [9, 9],
-  ],
-]
-
-const handleCube = {
-  x: 0,
-  y: 0,
-}
+let pResult = document.querySelector('.result')
+const enemyTable = []
+let result = 0
+let enemyInterval = 150
+const squareTable = []
 
 class Fields {
-  constructor(x, y) {
+  constructor(width, height, x, y) {
+    this.width = width
+    this.height = height
+
+    const square = document.createElement('cube')
+    square.classList.add('field')
+    square.style.width = this.width + 'px'
+    square.style.height = this.height + 'px'
+    CONTRAINER.appendChild(square)
+    this.square = square
     this.x = x
     this.y = y
-
-    let cube = document.createElement('cube')
-    cube.classList.add('field')
-    cube.style.width = this.x + 'px'
-    cube.style.height = this.y + 'px'
-    CONTRAINER.appendChild(cube)
-    this.cubeToMove = cube
-
-    // this.cubeToMove
   }
 }
+
 class Player extends Fields {
-  constructor(x, y) {
-    super(x, y)
+  constructor(width, height, x, y) {
+    super(width, height, x, y)
 
-    this.cubeToMove.style.backgroundColor = 'blue'
+    this.square.style.position = 'absolute'
+    this.square.style.backgroundColor = 'black'
     window.addEventListener('keydown', event => {
-      if (event.keyCode == 39) {
-        //right
-        // console.log(this.cubeToMove)
-
-        if (handleCube.x <= 8) {
-          handleCube.x++
-          // this.cubeToMove.style.top += `${parseInt(ale)} px`
-          // console.log(this.cubeToMove.style.top)
-          this.cubeToMove.style.transform += 'translateX(30px)'
-        } else {
-          this.cubeToMove.style.transform += 'translateX(0px)'
+      if (event.key === 'ArrowRight') {
+        if (this.x <= 8) {
+          this.x++
         }
-      } else if (event.keyCode == 37) {
-        if (handleCube.x >= 1) {
-          handleCube.x--
-          this.cubeToMove.style.transform += 'translateX(-30px)'
-        } else {
-          this.cubeToMove.style.transform += 'translateX(0px)'
+      } else if (event.key === 'ArrowLeft') {
+        if (this.x >= 1) {
+          this.x--
         }
-      } else if (event.keyCode == 38) {
-        if (handleCube.y >= 1) {
-          handleCube.y--
-
-          this.cubeToMove.style.transform += 'translateY(-30px)'
-        } else {
-          this.cubeToMove.style.transform += 'translateY(0px)'
+      } else if (event.key === 'ArrowUp') {
+        if (this.y >= 1) {
+          this.y--
         }
-
-        //top
-      } else if (event.keyCode == 40) {
-        if (handleCube.y <= 8) {
-          handleCube.y++
-          this.cubeToMove.style.transform += 'translateY(30px)'
-        } else {
-          this.cubeToMove.style.transform += 'translateX(0px)'
+      } else if (event.key === 'ArrowDown') {
+        if (this.y <= 8) {
+          this.y++
         }
-        //down
       }
-      // console.log(event)
-      console.log('x: ', handleCube.x, 'y: ', handleCube.y)
+      this.square.style.transform = `translate(${this.x * this.width}px, ${this.y * this.height}px)`
+
+      enemyTable.forEach((enemy, index) => {
+        if (player.x === enemy.x && player.y === enemy.y) {
+          enemy.square.style.backgroundColor = 'red'
+          enemyTable.splice(index, 1)
+          result++
+          pResult.innerHTML = result
+        }
+      })
+
+      if (result >= 50) {
+        window.location.reload()
+      }
     })
   }
 }
 
-const cubeTable = []
-for (i = 0; i < 100; i++) {
-  if (i == 0) {
-    const field = new Player(30, 30)
-    cubeTable.push(field)
-  } else {
-    const field = new Fields(30, 30)
-    cubeTable.push(field)
+// 2 tryby, najwięcej w 25 sekund
+//przeżyć najdłużej
+
+createEnemy = () => {
+  while (true) {
+    let random = Math.floor(Math.random() * 100)
+    if (enemyTable.includes(squareTable[random])) {
+      continue
+    }
+    squareTable[random].square.style.backgroundColor = 'blue'
+    enemyTable.push(squareTable[random])
+    if (enemyTable.length >= 30) {
+      window.location.reload()
+    }
+    break
   }
 }
 
-cubeTable[50].cubeToMove.style.backgroundColor = 'black'
+setInterval(createEnemy, enemyInterval)
 
-// cubeTable[0].cubeToMove.style.backgroundColor = 'blue'
+let windowWidth = window.matchMedia('(max-width: 1024px)')
+let fieldSize = 30
+if (!windowWidth.matches) {
+  fieldSize = 50
+}
+
+for (i = 0; i < 100; i++) {
+  const field = new Fields(fieldSize, fieldSize, i % 10, (i / 10) | 0)
+  squareTable.push(field)
+}
+
+const player = new Player(fieldSize, fieldSize, 0, 0)
