@@ -2,7 +2,7 @@ const CONTRAINER = document.querySelector('.container')
 let pResult = document.querySelector('.result')
 const enemyTable = []
 let result = 0
-let enemyInterval = 150
+let enemyInterval = 350
 const squareTable = []
 
 class Fields {
