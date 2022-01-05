@@ -2,8 +2,13 @@ const CONTRAINER = document.querySelector('.container')
 let pResult = document.querySelector('.result')
 const enemyTable = []
 let result = 0
-let enemyInterval = 333350
+let enemyInterval = 350
 const squareTable = []
+const yourTime = document.querySelector('.time')
+const startBoard = document.querySelector('.start-board')
+const board = document.querySelector('.board')
+const menu = document.querySelector('.menu')
+let show = true
 
 class Fields {
   constructor(width, height, x, y) {
@@ -52,55 +57,88 @@ class Player extends Fields {
       this.square.style.transform = `translate(${this.x * this.width}px, ${this.y * this.height}px)`
 
       enemyTable.forEach((enemy, index) => {
-        if (player.x === enemy.x && player.y === enemy.y) {
+        if (show && player.x === enemy.x && player.y === enemy.y) {
           enemy.square.style.backgroundColor = 'red'
           enemyTable.splice(index, 1)
           result++
-          pResult.innerHTML = result
+          pResult.innerHTML = `Score ${result}`
         }
       })
 
-      if (result >= 50) {
-        window.location.reload()
-      }
+      // if (result >= 50) {
+      //   window.location.reload()
+      // }
     })
   }
 }
-
-// 2 tryby, najwięcej w 25 sekund
-//przeżyć najdłużej
-
-createEnemy = () => {
-  while (true) {
-    let random = Math.floor(Math.random() * 100)
-    if (enemyTable.includes(squareTable[random])) {
-      continue
-    }
-    squareTable[random].square.style.backgroundColor = 'blue'
-    enemyTable.push(squareTable[random])
-    if (enemyTable.length >= 30) {
-      window.location.reload()
-    }
-    break
-  }
-}
-
-setInterval(createEnemy, enemyInterval)
 
 let windowWidth = window.matchMedia('(max-width: 1024px)')
 let fieldSize = 30
 if (!windowWidth.matches) {
   fieldSize = 50
 }
-
-for (i = 0; i < 100; i++) {
-  const field = new Fields(fieldSize, fieldSize, i % 10, (i / 10) | 0)
-  squareTable.push(field)
-}
-
 const player = new Player(fieldSize, fieldSize, 0, 0)
-// 2 tryby, najwięcej w 25 sekund //przeżyć najdłużej
+player.square.style.display = 'none'
 
-const aaa = () => {
+const survival = () => {
   console.log('111')
+  startBoard.style.display = 'none'
+  board.style.display = 'flex'
+  player.square.style.display = 'block'
+  startTimer()
+  startGame()
 }
+
+var timer = new Timer()
+
+function startTimer() {
+  timer.start()
+  timer.addEventListener('secondsUpdated', function () {
+    $('.timer').html(formatDisplayTime(timer.getTimeValues().minutes, timer.getTimeValues().seconds))
+  })
+
+  const formatDisplayTime = (minutes, seconds) => {
+    if (minutes >= 5) timer.stop()
+
+    if (seconds < 10) {
+      yourTime.innerText = `Time 0${timer.getTimeValues().minutes}:0${timer.getTimeValues().seconds}`
+      return `0${minutes}:0${seconds}`
+    } else {
+      yourTime.innerText = `Time 0${timer.getTimeValues().minutes}:${timer.getTimeValues().seconds}`
+      return `0${minutes}:${seconds}`
+    }
+  }
+}
+//poziomy trudności
+function startGame() {
+  createEnemy = () => {
+    while (true) {
+      let random = Math.floor(Math.random() * 100)
+      if (enemyTable.length == 15) {
+        timer.stop()
+        // player.square.style.display = 'none'
+        show = false
+        // player.square.remove()
+        break
+      }
+      if (enemyTable.includes(squareTable[random])) {
+        continue
+      }
+      squareTable[random].square.style.backgroundColor = 'blue'
+      enemyTable.push(squareTable[random])
+
+      break
+    }
+  }
+
+  setInterval(createEnemy, enemyInterval)
+
+  for (i = 0; i < 100; i++) {
+    const field = new Fields(fieldSize, fieldSize, i % 10, (i / 10) | 0)
+    squareTable.push(field)
+  }
+}
+
+menu.addEventListener('click', () => {
+  window.location.reload()
+})

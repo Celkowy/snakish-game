@@ -8,18 +8,33 @@
     <title>Document</title>
   </head>
   <body>
-    <div hidden class="start-board">
-      <div class="survival">
-        <button onClick="aaa()">Survival</button>
-        <p>Survive as long as you can. 30 blue blocks on map = you lost</p>
-      </div>
-      <div class="collector">
-        <button onClick="aaa()">Collector</button>
-        <p>Collect as much as you can within 25 seconds</p>
+    <div class="menu">Menu</div>
+    <div class="start-board">
+      <div class="wrapper">
+        <p class="choose-wisely">Choose wisely!</p>
+
+        <div class="sections">
+          <div class="survival section">
+            <button onClick="survival()">Survival</button>
+            <p>Survive as long as you can</p>
+          </div>
+          <div class="collector section">
+            <button onClick="aaa()">Collector</button>
+            <p>Collect as much as you can within 25 seconds</p>
+          </div>
+        </div>
       </div>
     </div>
-    <p class="result">0</p>
+    <div class="board">
+      <div class="result">
+        <span>Score</span>
+        <p class="score">&nbsp;0</p>
+      </div>
+      <p class="time">Time 00:00</p>
+    </div>
     <div class="container"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/easytimer@1.1.1/src/easytimer.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
