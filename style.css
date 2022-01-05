@@ -3,6 +3,7 @@
 * {
   font-family: 'Mulish', sans-serif;
   font-family: 'Open Sans', sans-serif;
+  color: white;
 }
 
 body {
@@ -31,5 +32,4 @@ body {
   left: 50%;
   transform: translateX(-50%);
   font-size: 48px;
-  color: white;
 }

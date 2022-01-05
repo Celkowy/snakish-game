@@ -2,7 +2,7 @@ const CONTRAINER = document.querySelector('.container')
 let pResult = document.querySelector('.result')
 const enemyTable = []
 let result = 0
-let enemyInterval = 350
+let enemyInterval = 333350
 const squareTable = []
 
 class Fields {
@@ -27,20 +27,24 @@ class Player extends Fields {
 
     this.square.style.position = 'absolute'
     this.square.style.backgroundColor = 'black'
+    let size = this.square.style.width[0] + this.square.style.width[1] - 1
+    this.square.style.width = `${size}px`
+    this.square.style.height = `${size}px`
+
     window.addEventListener('keydown', event => {
-      if (event.key === 'ArrowRight') {
+      if (event.key === 'ArrowRight' || event.key === 'd') {
         if (this.x <= 8) {
           this.x++
         }
-      } else if (event.key === 'ArrowLeft') {
+      } else if (event.key === 'ArrowLeft' || event.key === 'a') {
         if (this.x >= 1) {
           this.x--
         }
-      } else if (event.key === 'ArrowUp') {
+      } else if (event.key === 'ArrowUp' || event.key === 'w') {
         if (this.y >= 1) {
           this.y--
         }
-      } else if (event.key === 'ArrowDown') {
+      } else if (event.key === 'ArrowDown' || event.key === 's') {
         if (this.y <= 8) {
           this.y++
         }
@@ -95,3 +99,8 @@ for (i = 0; i < 100; i++) {
 }
 
 const player = new Player(fieldSize, fieldSize, 0, 0)
+// 2 tryby, najwięcej w 25 sekund //przeżyć najdłużej
+
+const aaa = () => {
+  console.log('111')
+}
