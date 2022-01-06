@@ -1,23 +1,38 @@
 const CONTRAINER = document.querySelector('.container')
-let pResult = document.querySelector('.result')
-const enemyTable = []
-let result = 0
-let enemyInterval = 350
-const squareTable = []
 const YOUR_TIME = document.querySelector('.time')
 const START_BOARD = document.querySelector('.start-board')
 const BOARD = document.querySelector('.board')
 const MENU = document.querySelector('.menu')
 const SETTINGS = document.querySelector('.settings')
 const SETTINGS_POPUP = document.querySelector('.settings-popup')
-let show = true
-let LEVEL_DIFFICULTY = document.querySelector('.level-difficulty')
+const LEVEL_DIFFICULTY = document.querySelector('.level-difficulty')
+let pResult = document.querySelector('.result')
 
-let settings = {
-  difficulty: `${JSON.parse(localStorage.getItem('settings')).difficulty || 'Easy'}`,
+const enemyTable = []
+let result = 0
+let enemyInterval = 350
+const squareTable = []
+let show = true
+let settings = {}
+if (localStorage) {
+  settings = {
+    difficulty: `${JSON.parse(localStorage.getItem('settings')).difficulty || 'Easy'}`,
+  }
+} else {
+  settings = {
+    difficulty: 'Easy',
+  }
 }
 
-// localStorage.setItem('settings', JSON.stringify(settings))
+let windowWidth = window.matchMedia('(max-width: 1024px)')
+let fieldSize = 30
+if (!windowWidth.matches) {
+  fieldSize = 50
+}
+
+const gameMode = {
+  mode: '',
+}
 
 SETTINGS.addEventListener('click', () => {
   SETTINGS_POPUP.classList.toggle('hide')
@@ -26,10 +41,15 @@ SETTINGS.addEventListener('click', () => {
   checkColor()
 })
 
+MENU.addEventListener('click', () => {
+  window.location.reload()
+})
+
 function checkColor() {
   LEVEL_DIFFICULTY.className = `level-difficulty ${settings.difficulty.toLowerCase()}`
 }
 
+var timer = new Timer()
 LEVEL_DIFFICULTY.textContent = `${settings.difficulty}`
 checkColor()
 
@@ -44,6 +64,7 @@ function changeDifficulty(arg) {
   START_BOARD.classList.toggle('hide')
 }
 
+//class to create fields
 class Fields {
   constructor(width, height, x, y) {
     this.width = width
@@ -60,6 +81,7 @@ class Fields {
   }
 }
 
+//class to create player, handle movement and a way to deal with enemies
 class Player extends Fields {
   constructor(width, height, x, y) {
     super(width, height, x, y)
@@ -98,28 +120,18 @@ class Player extends Fields {
           pResult.innerHTML = `Score ${result}`
         }
       })
-
-      // if (result >= 50) {
-      //   window.location.reload()
-      // }
     })
   }
 }
 
-let windowWidth = window.matchMedia('(max-width: 1024px)')
-let fieldSize = 30
-if (!windowWidth.matches) {
-  fieldSize = 50
-}
-const player = new Player(fieldSize, fieldSize, 0, 0)
-player.square.style.display = 'none'
-
-const gameMode = {
-  mode: '',
-}
-
-const survival = () => {
-  gameMode.mode = 'survival'
+//applying settings to selected mode
+const chooseMode = mode => {
+  if (mode === 'survival') {
+    gameMode.mode = 'survival'
+  } else if (mode === 'collector') {
+    YOUR_TIME.innerHTML = `Time 00:25`
+    gameMode.mode = 'collector'
+  }
   SETTINGS.hidden = true
   START_BOARD.style.display = 'none'
   BOARD.style.display = 'flex'
@@ -127,19 +139,6 @@ const survival = () => {
   startTimer()
   startGame(JSON.parse(localStorage.getItem('settings')).difficulty)
 }
-
-const collector = () => {
-  YOUR_TIME.innerHTML = `Time 00:25`
-  gameMode.mode = 'collector'
-  SETTINGS.hidden = true
-  START_BOARD.style.display = 'none'
-  BOARD.style.display = 'flex'
-  player.square.style.display = 'block'
-  startTimer()
-  startGame(JSON.parse(localStorage.getItem('settings')).difficulty)
-}
-
-var timer = new Timer()
 
 function startTimer() {
   if (gameMode.mode === 'survival') {
@@ -147,69 +146,27 @@ function startTimer() {
     timer.addEventListener('secondsUpdated', function () {
       $('.timer').html(formatDisplayTime(timer.getTimeValues().minutes, timer.getTimeValues().seconds))
     })
-
-    const formatDisplayTime = (minutes, seconds) => {
-      if (minutes >= 5) timer.stop()
-
-      if (seconds < 10) {
-        YOUR_TIME.innerText = `Time 0${timer.getTimeValues().minutes}:0${timer.getTimeValues().seconds}`
-        return `0${minutes}:0${seconds}`
-      } else {
-        YOUR_TIME.innerText = `Time 0${timer.getTimeValues().minutes}:${timer.getTimeValues().seconds}`
-        return `0${minutes}:${seconds}`
-      }
-    }
   } else {
     timer.start({ countdown: true, startValues: { seconds: 25 } })
     timer.addEventListener('secondsUpdated', function () {
       $('.timer').html(formatDisplayTime(timer.getTimeValues().minutes, timer.getTimeValues().seconds))
     })
-
-    const formatDisplayTime = (minutes, seconds) => {
-      if (seconds === 0) timer.stop()
-
-      if (seconds < 10) {
-        YOUR_TIME.innerText = `Time 0${timer.getTimeValues().minutes}:0${timer.getTimeValues().seconds}`
-        return `0${minutes}:0${seconds}`
-      } else {
-        YOUR_TIME.innerText = `Time 0${timer.getTimeValues().minutes}:${timer.getTimeValues().seconds}`
-        return `0${minutes}:${seconds}`
-      }
-    }
   }
 }
-//restart jak przegrasz
-function startGame() {
-  createEnemy = () => {
-    while (true) {
-      let random = Math.floor(Math.random() * 100)
-      if (gameMode.mode === 'survival') {
-        if (enemyTable.length == difficultyLevel(JSON.parse(localStorage.getItem('settings')).difficulty)) {
-          timer.stop()
-          player.square.style.display = 'none'
-          show = false
-          player.square.remove()
-          break
-        }
-      } else {
-        if (YOUR_TIME.textContent === 'Time 00:00' || enemyTable.length >= 90) {
-          timer.stop()
-          player.square.style.display = 'none'
-          show = false
-          player.square.remove()
-          break
-        }
-      }
 
-      if (enemyTable.includes(squareTable[random])) {
-        continue
-      }
-      squareTable[random].square.style.backgroundColor = 'blue'
-      enemyTable.push(squareTable[random])
-      break
-    }
+//function to format displayed time
+const formatDisplayTime = (minutes, seconds) => {
+  if (minutes >= 5) timer.stop()
+  if (seconds < 10) {
+    YOUR_TIME.innerText = `Time 0${timer.getTimeValues().minutes}:0${timer.getTimeValues().seconds}`
+    return `0${minutes}:0${seconds}`
+  } else {
+    YOUR_TIME.innerText = `Time 0${timer.getTimeValues().minutes}:${timer.getTimeValues().seconds}`
+    return `0${minutes}:${seconds}`
   }
+}
 
+function startGame() {
   let myInterval = setInterval(createEnemy, enemyInterval)
   if (gameMode.mode === 'survival') {
   } else {
@@ -223,9 +180,38 @@ function startGame() {
   }
 }
 
-MENU.addEventListener('click', () => {
-  window.location.reload()
-})
+const player = new Player(fieldSize, fieldSize, 0, 0)
+player.square.style.display = 'none'
+
+function createEnemy() {
+  while (true) {
+    let random = Math.floor(Math.random() * 100)
+    if (gameMode.mode === 'survival') {
+      if (enemyTable.length == difficultyLevel(JSON.parse(localStorage.getItem('settings')).difficulty)) {
+        timer.stop()
+        player.square.style.display = 'none'
+        show = false
+        player.square.remove()
+        break
+      }
+    } else {
+      if (YOUR_TIME.textContent === 'Time 00:00' || enemyTable.length >= 90) {
+        timer.stop()
+        player.square.style.display = 'none'
+        show = false
+        player.square.remove()
+        break
+      }
+    }
+
+    if (enemyTable.includes(squareTable[random])) {
+      continue
+    }
+    squareTable[random].square.style.backgroundColor = 'blue'
+    enemyTable.push(squareTable[random])
+    break
+  }
+}
 
 function difficultyLevel(lv) {
   let level = lv.toLowerCase()
@@ -242,3 +228,6 @@ function difficultyLevel(lv) {
     else if (level === 'insane') return 125
   }
 }
+
+//restart jak przegrasz
+//wytłumaczenie settingsów do trybów
