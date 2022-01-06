@@ -110,6 +110,10 @@ function startTimer() {
   }
 }
 //poziomy trudności
+//custom poziom trudności/wybierz ilość kwadracików, czas
+//settings popup
+//restart jak przegrasz
+//napisać collector mode
 function startGame() {
   createEnemy = () => {
     while (true) {

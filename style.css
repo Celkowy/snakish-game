@@ -97,11 +97,17 @@ button:active {
   justify-content: space-evenly;
 }
 
-.menu {
+.menu,
+.settings {
   position: absolute;
+  z-index: 10;
   top: 50px;
   left: 50px;
   font-size: 48px;
   cursor: pointer;
   text-decoration: underline;
+}
+
+.settings {
+  left: calc(100vw - 228px);
 }
