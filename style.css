@@ -45,6 +45,10 @@ body {
   justify-content: center;
 }
 
+.start-board.hide {
+  display: none;
+}
+
 .sections {
   display: flex;
 }
@@ -100,7 +104,7 @@ button:active {
 .menu,
 .settings {
   position: absolute;
-  z-index: 10;
+  z-index: 15;
   top: 50px;
   left: 50px;
   font-size: 48px;
@@ -110,4 +114,56 @@ button:active {
 
 .settings {
   left: calc(100vw - 228px);
+}
+
+.settings-popup {
+  z-index: 11;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-popup.hide {
+  display: flex;
+}
+
+.easy-lv,
+.medium-lv,
+.hard-lv,
+.insane-lv {
+  text-align: center;
+  border: 1px solid white;
+  margin: 0 25px;
+  width: 125px;
+  padding: 10px 25px;
+  cursor: pointer;
+}
+
+.level-difficulty {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 21px;
+}
+
+.level-difficulty.insane {
+  color: red;
+}
+
+.level-difficulty.easy {
+  color: green;
+}
+
+.level-difficulty.medium {
+  color: yellow;
+}
+
+.level-difficulty.hard {
+  color: orange;
 }

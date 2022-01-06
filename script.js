@@ -8,7 +8,42 @@ const yourTime = document.querySelector('.time')
 const startBoard = document.querySelector('.start-board')
 const board = document.querySelector('.board')
 const menu = document.querySelector('.menu')
+const SETTINGS = document.querySelector('.settings')
+const SETTINGS_POPUP = document.querySelector('.settings-popup')
 let show = true
+let LEVEL_DIFFICULTY = document.querySelector('.level-difficulty')
+
+let settings = {
+  difficulty: `${JSON.parse(localStorage.getItem('settings')).difficulty || 'Easy'}`,
+}
+
+// localStorage.setItem('settings', JSON.stringify(settings))
+
+SETTINGS.addEventListener('click', () => {
+  SETTINGS_POPUP.classList.toggle('hide')
+  startBoard.classList.toggle('hide')
+  LEVEL_DIFFICULTY.textContent = `${settings.difficulty}`
+  checkColor()
+})
+
+function checkColor() {
+  LEVEL_DIFFICULTY.className = `level-difficulty ${settings.difficulty.toLowerCase()}`
+}
+
+LEVEL_DIFFICULTY.textContent = `${settings.difficulty}`
+checkColor()
+
+function changeDifficulty(arg) {
+  settings = {
+    difficulty: arg,
+  }
+  localStorage.setItem('settings', JSON.stringify(settings))
+  LEVEL_DIFFICULTY.textContent = `${settings.difficulty}`
+  checkColor()
+  SETTINGS_POPUP.classList.toggle('hide')
+  startBoard.classList.toggle('hide')
+  console.log(settings)
+}
 
 class Fields {
   constructor(width, height, x, y) {
@@ -80,62 +115,111 @@ if (!windowWidth.matches) {
 const player = new Player(fieldSize, fieldSize, 0, 0)
 player.square.style.display = 'none'
 
+const gameMode = {
+  mode: '',
+}
+
 const survival = () => {
+  gameMode.mode = 'survival'
+  SETTINGS.hidden = true
   console.log('111')
   startBoard.style.display = 'none'
   board.style.display = 'flex'
   player.square.style.display = 'block'
   startTimer()
-  startGame()
+  startGame(JSON.parse(localStorage.getItem('settings')).difficulty)
+}
+
+const collector = () => {
+  yourTime.innerHTML = `Time 00:25`
+  gameMode.mode = 'collector'
+  SETTINGS.hidden = true
+  startBoard.style.display = 'none'
+  board.style.display = 'flex'
+  player.square.style.display = 'block'
+  startTimer()
+  startGame(JSON.parse(localStorage.getItem('settings')).difficulty)
 }
 
 var timer = new Timer()
 
 function startTimer() {
-  timer.start()
-  timer.addEventListener('secondsUpdated', function () {
-    $('.timer').html(formatDisplayTime(timer.getTimeValues().minutes, timer.getTimeValues().seconds))
-  })
+  if (gameMode.mode === 'survival') {
+    timer.start()
+    timer.addEventListener('secondsUpdated', function () {
+      $('.timer').html(formatDisplayTime(timer.getTimeValues().minutes, timer.getTimeValues().seconds))
+    })
 
-  const formatDisplayTime = (minutes, seconds) => {
-    if (minutes >= 5) timer.stop()
+    const formatDisplayTime = (minutes, seconds) => {
+      if (minutes >= 5) timer.stop()
 
-    if (seconds < 10) {
-      yourTime.innerText = `Time 0${timer.getTimeValues().minutes}:0${timer.getTimeValues().seconds}`
-      return `0${minutes}:0${seconds}`
-    } else {
-      yourTime.innerText = `Time 0${timer.getTimeValues().minutes}:${timer.getTimeValues().seconds}`
-      return `0${minutes}:${seconds}`
+      if (seconds < 10) {
+        yourTime.innerText = `Time 0${timer.getTimeValues().minutes}:0${timer.getTimeValues().seconds}`
+        return `0${minutes}:0${seconds}`
+      } else {
+        yourTime.innerText = `Time 0${timer.getTimeValues().minutes}:${timer.getTimeValues().seconds}`
+        return `0${minutes}:${seconds}`
+      }
+    }
+  } else {
+    timer.start({ countdown: true, startValues: { seconds: 25 } })
+    timer.addEventListener('secondsUpdated', function () {
+      $('.timer').html(formatDisplayTime(timer.getTimeValues().minutes, timer.getTimeValues().seconds))
+    })
+
+    const formatDisplayTime = (minutes, seconds) => {
+      if (seconds === 0) timer.stop()
+
+      if (seconds < 10) {
+        yourTime.innerText = `Time 0${timer.getTimeValues().minutes}:0${timer.getTimeValues().seconds}`
+        return `0${minutes}:0${seconds}`
+      } else {
+        yourTime.innerText = `Time 0${timer.getTimeValues().minutes}:${timer.getTimeValues().seconds}`
+        return `0${minutes}:${seconds}`
+      }
     }
   }
 }
 //poziomy trudności
-//custom poziom trudności/wybierz ilość kwadracików, czas
-//settings popup
 //restart jak przegrasz
 //napisać collector mode
 function startGame() {
   createEnemy = () => {
     while (true) {
       let random = Math.floor(Math.random() * 100)
-      if (enemyTable.length == 15) {
-        timer.stop()
-        // player.square.style.display = 'none'
-        show = false
-        // player.square.remove()
-        break
+      if (gameMode.mode === 'survival') {
+        if (enemyTable.length == difficultyLevel(JSON.parse(localStorage.getItem('settings')).difficulty)) {
+          timer.stop()
+          player.square.style.display = 'none'
+          show = false
+          player.square.remove()
+          break
+        }
+      } else {
+        if (yourTime.textContent === 'Time 00:00') {
+          timer.stop()
+          player.square.style.display = 'none'
+          show = false
+          player.square.remove()
+          break
+        }
       }
+
       if (enemyTable.includes(squareTable[random])) {
         continue
       }
       squareTable[random].square.style.backgroundColor = 'blue'
       enemyTable.push(squareTable[random])
-
       break
     }
   }
 
-  setInterval(createEnemy, enemyInterval)
+  let myInterval = setInterval(createEnemy, enemyInterval)
+  if (gameMode.mode === 'survival') {
+  } else {
+    clearInterval(myInterval)
+    myInterval = setInterval(createEnemy, difficultyLevel(JSON.parse(localStorage.getItem('settings')).difficulty))
+  }
 
   for (i = 0; i < 100; i++) {
     const field = new Fields(fieldSize, fieldSize, i % 10, (i / 10) | 0)
@@ -146,3 +230,19 @@ function startGame() {
 menu.addEventListener('click', () => {
   window.location.reload()
 })
+
+function difficultyLevel(lv) {
+  let level = lv.toLowerCase()
+
+  if (gameMode.mode === 'survival') {
+    if (level === 'easy') return 20
+    else if (level === 'medium') return 16
+    else if (level === 'hard') return 12
+    else if (level === 'insane') return 8
+  } else {
+    if (level === 'easy') return 350
+    else if (level === 'medium') return 300
+    else if (level === 'hard') return 250
+    else if (level === 'insane') return 150
+  }
+}
