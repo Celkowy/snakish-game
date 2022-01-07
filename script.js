@@ -13,15 +13,15 @@ let result = 0
 let enemyInterval = 350
 const squareTable = []
 let show = true
-let settings = {}
-if (localStorage) {
-  settings = {
-    difficulty: `${JSON.parse(localStorage.getItem('settings')).difficulty || 'Easy'}`,
-  }
-} else {
+
+let settings = {
+  difficulty: '',
+}
+if (!localStorage.settings) {
   settings = {
     difficulty: 'Easy',
   }
+  localStorage.setItem('settings', JSON.stringify(settings))
 }
 
 let windowWidth = window.matchMedia('(max-width: 1024px)')
