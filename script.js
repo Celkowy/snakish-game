@@ -14,15 +14,7 @@ let enemyInterval = 350
 const squareTable = []
 let show = true
 
-let settings = {
-  difficulty: '',
-}
-if (!localStorage.settings) {
-  settings = {
-    difficulty: 'Easy',
-  }
-  localStorage.setItem('settings', JSON.stringify(settings))
-}
+LEVEL_DIFFICULTY.textContent = `${getDifficulty()}`
 
 let windowWidth = window.matchMedia('(max-width: 1024px)')
 let fieldSize = 30
@@ -37,7 +29,7 @@ const gameMode = {
 SETTINGS.addEventListener('click', () => {
   SETTINGS_POPUP.classList.toggle('hide')
   START_BOARD.classList.toggle('hide')
-  LEVEL_DIFFICULTY.textContent = `${settings.difficulty}`
+  LEVEL_DIFFICULTY.textContent = `${getDifficulty()}`
   checkColor()
 })
 
@@ -46,19 +38,15 @@ MENU.addEventListener('click', () => {
 })
 
 function checkColor() {
-  LEVEL_DIFFICULTY.className = `level-difficulty ${settings.difficulty.toLowerCase()}`
+  LEVEL_DIFFICULTY.className = `level-difficulty ${getDifficulty().toLowerCase()}`
 }
 
 var timer = new Timer()
-LEVEL_DIFFICULTY.textContent = `${settings.difficulty}`
 checkColor()
 
 function changeDifficulty(arg) {
-  settings = {
-    difficulty: arg,
-  }
-  localStorage.setItem('settings', JSON.stringify(settings))
-  LEVEL_DIFFICULTY.textContent = `${settings.difficulty}`
+  setDifficulty(arg)
+  LEVEL_DIFFICULTY.textContent = `${getDifficulty()}`
   checkColor()
   SETTINGS_POPUP.classList.toggle('hide')
   START_BOARD.classList.toggle('hide')
@@ -70,7 +58,7 @@ class Fields {
     this.width = width
     this.height = height
 
-    const square = document.createElement('cube')
+    const square = document.createElement('div')
     square.classList.add('field')
     square.style.width = this.width + 'px'
     square.style.height = this.height + 'px'
@@ -137,7 +125,7 @@ const chooseMode = mode => {
   BOARD.style.display = 'flex'
   player.square.style.display = 'block'
   startTimer()
-  startGame(JSON.parse(localStorage.getItem('settings')).difficulty)
+  startGame(getDifficulty())
 }
 
 function startTimer() {
@@ -171,7 +159,7 @@ function startGame() {
   if (gameMode.mode === 'survival') {
   } else {
     clearInterval(myInterval)
-    myInterval = setInterval(createEnemy, difficultyLevel(JSON.parse(localStorage.getItem('settings')).difficulty))
+    myInterval = setInterval(createEnemy, difficultyLevel(getDifficulty()))
   }
 
   for (i = 0; i < 100; i++) {
@@ -187,7 +175,7 @@ function createEnemy() {
   while (true) {
     let random = Math.floor(Math.random() * 100)
     if (gameMode.mode === 'survival') {
-      if (enemyTable.length == difficultyLevel(JSON.parse(localStorage.getItem('settings')).difficulty)) {
+      if (enemyTable.length == difficultyLevel(getDifficulty())) {
         timer.stop()
         player.square.style.display = 'none'
         show = false
@@ -231,3 +219,17 @@ function difficultyLevel(lv) {
 
 //restart jak przegrasz
 //wytłumaczenie settingsów do trybów
+
+function getDifficulty() {
+  const def = 'Easy'
+  const item = localStorage.getItem('difficulty')
+  if (item == null) {
+    setDifficulty(def)
+    return def
+  }
+  return item
+}
+
+function setDifficulty(difficulty) {
+  return localStorage.setItem('difficulty', difficulty)
+}
