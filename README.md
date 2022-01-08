@@ -1,1 +1,1 @@
-"# snakish-game" 
+# snakish-game
