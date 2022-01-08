@@ -24,6 +24,24 @@
             <p>Collect as much as you can within 25 seconds</p>
           </div>
         </div>
+        <div class="more-info">
+          <button onclick="openPopup('survival')">More info</button>
+          <button onclick="openPopup('collector')">More info</button>
+        </div>
+        <!-- <div class="more-info">
+          <div class="more-info-element">
+            <span>Easy:</span>
+            <span>Medium:</span>
+            <span>Hard:</span>
+            <span>Insane:</span>
+          </div>
+          <div class="more-info-element">
+            <span>Easy:</span>
+            <span>Medium:</span>
+            <span>Hard:</span>
+            <span>Insane:</span>
+          </div>
+        </div> -->
       </div>
     </div>
     <div class="board">
@@ -41,8 +59,16 @@
       <button onClick="changeDifficulty('Insane')" class="insane-lv">Insane</button>
     </div>
 
-    <div class="level-difficulty"></div>
-
+    <div class="wrap">
+      <div class="mode-wrapper">
+        <span>Mode:&nbsp;</span>
+        <div class="mode"></div>
+      </div>
+      <div class="level-difficulty-wrap">
+        <span>Difficulty:&nbsp;</span>
+        <div class="level-difficulty"></div>
+      </div>
+    </div>
     <div class="container"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/easytimer@1.1.1/src/easytimer.min.js"></script>

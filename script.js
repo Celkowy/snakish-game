@@ -6,6 +6,7 @@ const MENU = document.querySelector('.menu')
 const SETTINGS = document.querySelector('.settings')
 const SETTINGS_POPUP = document.querySelector('.settings-popup')
 const LEVEL_DIFFICULTY = document.querySelector('.level-difficulty')
+const MODE = document.querySelector('.mode')
 let pResult = document.querySelector('.result')
 
 const enemyTable = []
@@ -46,7 +47,7 @@ checkColor()
 
 function changeDifficulty(arg) {
   setDifficulty(arg)
-  LEVEL_DIFFICULTY.textContent = `${getDifficulty()}`
+  LEVEL_DIFFICULTY.textContent = ` ${getDifficulty()}`
   checkColor()
   SETTINGS_POPUP.classList.toggle('hide')
   START_BOARD.classList.toggle('hide')
@@ -120,6 +121,7 @@ const chooseMode = mode => {
     YOUR_TIME.innerHTML = `Time 00:25`
     gameMode.mode = 'collector'
   }
+  MODE.innerHTML = `${gameMode.mode}`
   SETTINGS.hidden = true
   START_BOARD.style.display = 'none'
   BOARD.style.display = 'flex'
@@ -205,10 +207,10 @@ function difficultyLevel(lv) {
   let level = lv.toLowerCase()
 
   if (gameMode.mode === 'survival') {
-    if (level === 'easy') return 20
-    else if (level === 'medium') return 16
-    else if (level === 'hard') return 12
-    else if (level === 'insane') return 8
+    if (level === 'easy') return 30
+    else if (level === 'medium') return 25
+    else if (level === 'hard') return 20
+    else if (level === 'insane') return 10
   } else {
     if (level === 'easy') return 300
     else if (level === 'medium') return 225
@@ -219,6 +221,7 @@ function difficultyLevel(lv) {
 
 //restart jak przegrasz
 //wytłumaczenie settingsów do trybów
+// info w jakim jesteś trybie jak go wybierzesz i ile max może byc na ekranie
 
 function getDifficulty() {
   const def = 'Easy'
@@ -232,4 +235,12 @@ function getDifficulty() {
 
 function setDifficulty(difficulty) {
   return localStorage.setItem('difficulty', difficulty)
+}
+
+function openPopup(mode) {
+  if (mode === 'survival') {
+    console.log('123')
+  } else {
+    console.log('321')
+  }
 }

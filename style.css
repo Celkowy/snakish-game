@@ -145,12 +145,33 @@ button:active {
   cursor: pointer;
 }
 
-.level-difficulty {
+.wrap {
   position: absolute;
   bottom: 50px;
   left: 50%;
+  width: 180px;
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
+  align-items: center;
   transform: translateX(-50%);
   font-size: 21px;
+}
+
+.level-difficulty-wrap,
+.mode-wrapper {
+  display: flex;
+  width: 100%;
+}
+
+.more-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.more-info > button {
+  font-size: 14px;
 }
 
 .level-difficulty.insane {
@@ -167,4 +188,14 @@ button:active {
 
 .level-difficulty.hard {
   color: orange;
+}
+
+.more-info-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 400px;
+  background-color: #fff;
 }
