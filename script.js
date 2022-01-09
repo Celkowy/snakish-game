@@ -230,10 +230,6 @@ function difficultyLevel(lv) {
   return levelRules[gameMode.mode][level]
 }
 
-//restart jak przegrasz
-//wytłumaczenie settingsów do trybów
-// info w jakim jesteś trybie jak go wybierzesz i ile max może byc na ekranie
-//make name blue blue again
 function getDifficulty() {
   const def = 'Easy'
   const item = localStorage.getItem('difficulty')
@@ -255,17 +251,16 @@ async function openPopup(mode) {
   MORE_INFO_POPUP.classList.add('show')
   SETTINGS.hidden = true
   if (mode === 'survival') {
-    assignElements(
-      ({ modeName, firstInfo, secondInfo, thirdInfo, easyLevel, mediumLevel, hardLevel, insaneLevel } = data.survival)
-    )
+    assignElements(data.survival, 'survival')
   } else {
-    assignElements(
-      ({ modeName, firstInfo, secondInfo, thirdInfo, easyLevel, mediumLevel, hardLevel, insaneLevel } = data.collector)
-    )
+    assignElements(data.collector, 'collector')
   }
 }
 
-function assignElements(arg) {
+function assignElements(
+  { modeName, firstInfo, secondInfo, thirdInfo, easyLevel, mediumLevel, hardLevel, insaneLevel },
+  type
+) {
   const MODE_NAME = document.querySelector('.mode-name')
   const FIRST_INFO = document.querySelector('.first-info')
   const SECOND_INFO = document.querySelector('.second-info')
@@ -274,12 +269,17 @@ function assignElements(arg) {
   const MEDIUM_LEVEL = document.querySelector('.medium-level')
   const HARD_LEVEL = document.querySelector('.hard-level')
   const INSANE_LEVEL = document.querySelector('.insane-level')
-  MODE_NAME.textContent = arg.modeName
-  FIRST_INFO.textContent = arg.firstInfo
-  SECOND_INFO.textContent = arg.secondInfo
-  THIRD_INFO.textContent = arg.thirdInfo
-  EASY_LEVEL.textContent = arg.easyLevel + levelRules.survival.easy
-  MEDIUM_LEVEL.textContent = arg.mediumLevel + levelRules.survival.medium
-  HARD_LEVEL.textContent = arg.hardLevel + levelRules.survival.hard
-  INSANE_LEVEL.textContent = arg.insaneLevel + levelRules.survival.insane
+  MODE_NAME.textContent = modeName
+  FIRST_INFO.textContent = firstInfo
+  SECOND_INFO.textContent = secondInfo
+  THIRD_INFO.textContent = thirdInfo
+  EASY_LEVEL.textContent = easyLevel + ': ' + levelRules[type].easy
+  MEDIUM_LEVEL.textContent = mediumLevel + levelRules[type].medium
+  HARD_LEVEL.textContent = hardLevel + levelRules[type].hard
+  INSANE_LEVEL.textContent = insaneLevel + levelRules[type].insane
 }
+
+//restart jak przegrasz
+//wytłumaczenie settingsów do trybów
+//ile max może byc na ekranie
+//make name blue blue again

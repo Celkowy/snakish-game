@@ -80,7 +80,8 @@ button {
   font-size: 21px;
 }
 
-button:active {
+button:active,
+.fas:active {
   transform: scale(0.98);
 }
 
@@ -229,4 +230,9 @@ button:active {
 
 .more-info-element > * {
   padding: 5px;
+}
+
+.fas {
+  font-size: 34px;
+  transition: transform;
 }
