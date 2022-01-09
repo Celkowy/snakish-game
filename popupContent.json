@@ -1,0 +1,22 @@
+{
+  "survival": {
+    "modeName": "Survival mode",
+    "firstInfo": "Collect blue squares",
+    "secondInfo": "Try to survive as long as you can",
+    "thirdInfo": "Max squares on screen until you lose:",
+    "easyLevel": "Easy: ",
+    "mediumLevel": "Medium: ",
+    "hardLevel": "Hard: ",
+    "insaneLevel": "Insane: "
+  },
+  "collector": {
+    "modeName": "Collector mode",
+    "firstInfo": "",
+    "secondInfo": "",
+    "thirdInfo": "",
+    "easyLevel": "Easy: ",
+    "mediumLevel": "Medium: ",
+    "hardLevel": "Hard: ",
+    "insaneLevel": "Insane: "
+  }
+}

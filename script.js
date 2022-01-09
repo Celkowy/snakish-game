@@ -7,6 +7,8 @@ const SETTINGS = document.querySelector('.settings')
 const SETTINGS_POPUP = document.querySelector('.settings-popup')
 const LEVEL_DIFFICULTY = document.querySelector('.level-difficulty')
 const MODE = document.querySelector('.mode')
+const MORE_INFO_POPUP = document.querySelector('.more-info-popup')
+const CLOSE_MORE_INFO_POPUP = document.querySelector('.close-more-info-popup')
 let pResult = document.querySelector('.result')
 
 const enemyTable = []
@@ -36,6 +38,11 @@ SETTINGS.addEventListener('click', () => {
 
 MENU.addEventListener('click', () => {
   window.location.reload()
+})
+
+CLOSE_MORE_INFO_POPUP.addEventListener('click', () => {
+  MORE_INFO_POPUP.classList.remove('show')
+  SETTINGS.hidden = false
 })
 
 function checkColor() {
@@ -203,26 +210,30 @@ function createEnemy() {
   }
 }
 
+const levelRules = {
+  survival: {
+    easy: 30,
+    medium: 25,
+    hard: 20,
+    insane: 10,
+  },
+  collector: {
+    easy: 300,
+    medium: 225,
+    hard: 175,
+    insane: 125,
+  },
+}
+
 function difficultyLevel(lv) {
   let level = lv.toLowerCase()
-
-  if (gameMode.mode === 'survival') {
-    if (level === 'easy') return 30
-    else if (level === 'medium') return 25
-    else if (level === 'hard') return 20
-    else if (level === 'insane') return 10
-  } else {
-    if (level === 'easy') return 300
-    else if (level === 'medium') return 225
-    else if (level === 'hard') return 175
-    else if (level === 'insane') return 125
-  }
+  return levelRules[gameMode.mode][level]
 }
 
 //restart jak przegrasz
 //wytłumaczenie settingsów do trybów
 // info w jakim jesteś trybie jak go wybierzesz i ile max może byc na ekranie
-
+//make name blue blue again
 function getDifficulty() {
   const def = 'Easy'
   const item = localStorage.getItem('difficulty')
@@ -237,10 +248,38 @@ function setDifficulty(difficulty) {
   return localStorage.setItem('difficulty', difficulty)
 }
 
-function openPopup(mode) {
+async function openPopup(mode) {
+  const response = await fetch('popupContent.json')
+  const data = await response.json()
+
+  MORE_INFO_POPUP.classList.add('show')
+  SETTINGS.hidden = true
   if (mode === 'survival') {
-    console.log('123')
+    assignElements(
+      ({ modeName, firstInfo, secondInfo, thirdInfo, easyLevel, mediumLevel, hardLevel, insaneLevel } = data.survival)
+    )
   } else {
-    console.log('321')
+    assignElements(
+      ({ modeName, firstInfo, secondInfo, thirdInfo, easyLevel, mediumLevel, hardLevel, insaneLevel } = data.collector)
+    )
   }
+}
+
+function assignElements(arg) {
+  const MODE_NAME = document.querySelector('.mode-name')
+  const FIRST_INFO = document.querySelector('.first-info')
+  const SECOND_INFO = document.querySelector('.second-info')
+  const THIRD_INFO = document.querySelector('.third-info')
+  const EASY_LEVEL = document.querySelector('.easy-level')
+  const MEDIUM_LEVEL = document.querySelector('.medium-level')
+  const HARD_LEVEL = document.querySelector('.hard-level')
+  const INSANE_LEVEL = document.querySelector('.insane-level')
+  MODE_NAME.textContent = arg.modeName
+  FIRST_INFO.textContent = arg.firstInfo
+  SECOND_INFO.textContent = arg.secondInfo
+  THIRD_INFO.textContent = arg.thirdInfo
+  EASY_LEVEL.textContent = arg.easyLevel + levelRules.survival.easy
+  MEDIUM_LEVEL.textContent = arg.mediumLevel + levelRules.survival.medium
+  HARD_LEVEL.textContent = arg.hardLevel + levelRules.survival.hard
+  INSANE_LEVEL.textContent = arg.insaneLevel + levelRules.survival.insane
 }

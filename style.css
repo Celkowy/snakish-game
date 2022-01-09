@@ -194,8 +194,39 @@ button:active {
   position: absolute;
   top: 50%;
   left: 50%;
+  display: none;
   transform: translate(-50%, -50%);
   width: 900px;
-  height: 400px;
-  background-color: #fff;
+  height: 450px;
+  background-color: black;
+  border: 1px solid white;
+}
+
+.more-info-popup.show {
+  display: flex;
+  flex-direction: column;
+}
+
+.close-more-info-popup {
+  position: absolute;
+  right: 25px;
+  top: 25px;
+  cursor: pointer;
+}
+
+.more-info-element {
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  font-size: 18px;
+}
+
+.mode-name {
+  font-size: 41px;
+}
+
+.more-info-element > * {
+  padding: 5px;
 }
