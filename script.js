@@ -53,7 +53,7 @@ var timer = new Timer()
 checkColor()
 
 function changeDifficulty(arg) {
-  setDifficulty(arg)
+  saveToLocalstorage('difficulty', arg)
   LEVEL_DIFFICULTY.textContent = ` ${getDifficulty()}`
   checkColor()
   SETTINGS_POPUP.classList.toggle('hide')
@@ -189,6 +189,7 @@ function createEnemy() {
         player.square.style.display = 'none'
         show = false
         player.square.remove()
+        saveToLocalstorage('highestScoreSurvival', result)
         break
       }
     } else {
@@ -197,6 +198,7 @@ function createEnemy() {
         player.square.style.display = 'none'
         show = false
         player.square.remove()
+        saveToLocalstorage('highestScoreCollector', result)
         break
       }
     }
@@ -234,14 +236,14 @@ function getDifficulty() {
   const def = 'Easy'
   const item = localStorage.getItem('difficulty')
   if (item == null) {
-    setDifficulty(def)
+    saveToLocalstorage('difficulty', def)
     return def
   }
   return item
 }
 
-function setDifficulty(difficulty) {
-  return localStorage.setItem('difficulty', difficulty)
+function saveToLocalstorage(name, value) {
+  return localStorage.setItem(`${name}`, value)
 }
 
 async function openPopup(mode) {
@@ -279,3 +281,5 @@ function assignElements(
 //ile max może byc na ekranie w trakcie grania w dany tryb
 //zmień kwadraty na snejka i owocki
 //przeglądnij nazwy
+//zapisywanie highest scora w localStorage
+//wyświetlanie najlepszego scora obok scora z rozróżnieniem trybów gry
