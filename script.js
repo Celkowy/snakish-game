@@ -83,7 +83,8 @@ class Player extends Fields {
     super(width, height, x, y)
 
     this.square.style.position = 'absolute'
-    this.square.style.backgroundColor = 'black'
+    this.square.style.backgroundImage = 'url(img/snake.png)'
+
     let size = this.square.style.width[0] + this.square.style.width[1] - 1
     this.square.style.width = `${size}px`
     this.square.style.height = `${size}px`
@@ -110,7 +111,8 @@ class Player extends Fields {
 
       enemyTable.forEach((enemy, index) => {
         if (show && player.x === enemy.x && player.y === enemy.y) {
-          enemy.square.style.backgroundColor = 'red'
+          enemy.square.style.backgroundColor = '#4dc1f9'
+          enemy.square.style.backgroundImage = ''
           enemyTable.splice(index, 1)
           result++
           pResult.innerHTML = `Score ${result}`
@@ -206,7 +208,7 @@ function createEnemy() {
     if (enemyTable.includes(squareTable[random])) {
       continue
     }
-    squareTable[random].square.style.backgroundColor = 'blue'
+    squareTable[random].square.style.backgroundImage = 'url(img/apple.png)'
     enemyTable.push(squareTable[random])
     break
   }
@@ -281,5 +283,4 @@ function assignElements(
 //ile max może byc na ekranie w trakcie grania w dany tryb
 //zmień kwadraty na snejka i owocki
 //przeglądnij nazwy
-//zapisywanie highest scora w localStorage
-//wyświetlanie najlepszego scora obok scora z rozróżnieniem trybów gry
+//wyświetlanie najlepszego scora obok scora z rozróżnieniem trybów gry, zapisywanie highest scora w localStorage
