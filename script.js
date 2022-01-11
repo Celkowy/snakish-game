@@ -250,16 +250,12 @@ async function openPopup(mode) {
 
   MORE_INFO_POPUP.classList.add('show')
   SETTINGS.hidden = true
-  if (mode === 'survival') {
-    assignElements(data.survival, 'survival')
-  } else {
-    assignElements(data.collector, 'collector')
-  }
+  assignElements(data[mode], mode)
 }
 
 function assignElements(
   { modeName, firstInfo, secondInfo, thirdInfo, easyLevel, mediumLevel, hardLevel, insaneLevel },
-  type
+  mode
 ) {
   const MODE_NAME = document.querySelector('.mode-name')
   const FIRST_INFO = document.querySelector('.first-info')
@@ -273,13 +269,13 @@ function assignElements(
   FIRST_INFO.textContent = firstInfo
   SECOND_INFO.textContent = secondInfo
   THIRD_INFO.textContent = thirdInfo
-  EASY_LEVEL.textContent = easyLevel + ': ' + levelRules[type].easy
-  MEDIUM_LEVEL.textContent = mediumLevel + levelRules[type].medium
-  HARD_LEVEL.textContent = hardLevel + levelRules[type].hard
-  INSANE_LEVEL.textContent = insaneLevel + levelRules[type].insane
+  EASY_LEVEL.textContent = easyLevel + levelRules[mode].easy + `${mode === 'collector' ? 'ms' : ''}`
+  MEDIUM_LEVEL.textContent = mediumLevel + levelRules[mode].medium + `${mode === 'collector' ? 'ms' : ''}`
+  HARD_LEVEL.textContent = hardLevel + levelRules[mode].hard + `${mode === 'collector' ? 'ms' : ''}`
+  INSANE_LEVEL.textContent = insaneLevel + levelRules[mode].insane + `${mode === 'collector' ? 'ms' : ''}`
 }
 
 //restart jak przegrasz
-//wytłumaczenie settingsów do trybów
-//ile max może byc na ekranie
-//make name blue blue again
+//ile max może byc na ekranie w trakcie grania w dany tryb
+//zmień kwadraty na snejka i owocki
+//przeglądnij nazwy
