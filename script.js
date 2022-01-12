@@ -114,12 +114,20 @@ class Player extends Fields {
           enemy.square.style.backgroundColor = '#4dc1f9'
           enemy.square.style.backgroundImage = ''
           enemyTable.splice(index, 1)
+          playSound()
           result++
           pResult.innerHTML = `Score ${result}`
         }
       })
     })
   }
+}
+
+function playSound() {
+  const sound = document.getElementById('yummy')
+  sound.pause()
+  sound.currentTime = 0
+  sound.play()
 }
 
 //applying settings to selected mode
@@ -281,6 +289,5 @@ function assignElements(
 
 //restart jak przegrasz
 //ile max może byc na ekranie w trakcie grania w dany tryb
-//zmień kwadraty na snejka i owocki
 //przeglądnij nazwy
 //wyświetlanie najlepszego scora obok scora z rozróżnieniem trybów gry, zapisywanie highest scora w localStorage

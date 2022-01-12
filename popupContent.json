@@ -1,7 +1,7 @@
 {
   "survival": {
     "modeName": "Survival mode",
-    "firstInfo": "Collect blue squares",
+    "firstInfo": "Collect apples",
     "secondInfo": "Try to survive as long as you can",
     "thirdInfo": "Max number of squares on screen until you lose:",
     "easyLevel": "Easy: ",
@@ -11,7 +11,7 @@
   },
   "collector": {
     "modeName": "Collector mode",
-    "firstInfo": "Collect blue squares",
+    "firstInfo": "Collect apples",
     "secondInfo": "Try to collect as much as you can within 25 seconds",
     "thirdInfo": "Appearing speeds of blue squares per difficulty:",
     "easyLevel": "Easy: ",
