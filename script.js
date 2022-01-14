@@ -136,10 +136,12 @@ const chooseMode = mode => {
   if (mode === 'survival') {
     gameMode.mode = 'survival'
     HIGHEST_SCORE.textContent = localStorage.highestScoreSurvival
+    getLocalStorageProperty('0', 'highestScoreSurvival')
   } else if (mode === 'collector') {
     YOUR_TIME.innerHTML = `Time 00:25`
     HIGHEST_SCORE.textContent = localStorage.highestScoreCollector
     gameMode.mode = 'collector'
+    getLocalStorageProperty('0', 'highestScoreCollector')
   }
   MODE.innerHTML = `${gameMode.mode}`
   SETTINGS.hidden = true
@@ -202,7 +204,7 @@ function createEnemy() {
         player.square.style.display = 'none'
         show = false
         player.square.remove()
-        getLocalStorageProperty(result, 'highestScoreSurvival')
+        compareScore(result, 'highestScoreSurvival')
         break
       }
     } else {
@@ -211,7 +213,7 @@ function createEnemy() {
         player.square.style.display = 'none'
         show = false
         player.square.remove()
-        getLocalStorageProperty(result, 'highestScoreCollector')
+        compareScore(result, 'highestScoreCollector')
         break
       }
     }
@@ -222,6 +224,19 @@ function createEnemy() {
     squareTable[random].square.style.backgroundImage = 'url(img/apple.png)'
     enemyTable.push(squareTable[random])
     break
+  }
+}
+
+//sets initial score value to 0
+//checks if scored result is higher than personal best
+function compareScore(score, propertyName) {
+  if (getLocalStorageProperty('', propertyName) == null) {
+    saveToLocalstorage(propertyName, 0)
+  } else {
+    let highestScore = localStorage.getItem(propertyName)
+    if (highestScore < score) {
+      saveToLocalstorage(propertyName, score)
+    }
   }
 }
 
@@ -250,10 +265,6 @@ function getLocalStorageProperty(initialValue, propertyName) {
   if (item == null) {
     saveToLocalstorage(propertyName, initialValue)
     return initialValue
-  } else if (propertyName === 'highestScoreCollector' || propertyName === 'highestScoreSurvival') {
-    if (result > item) {
-      saveToLocalstorage(propertyName, initialValue)
-    }
   }
   return item
 }
@@ -296,4 +307,3 @@ function assignElements(
 //info you lost
 //restart jak przegrasz
 //ile max może byc na ekranie w trakcie grania w dany tryb
-//przeglądnij nazwy
