@@ -11,8 +11,8 @@
   },
   "collector": {
     "modeName": "Collector mode",
-    "firstInfo": "Collect apples",
-    "secondInfo": "Try to collect as much as you can within 25 seconds",
+    "firstInfo": "Try to collect as much apples as you can within 25 seconds",
+    "secondInfo": "If 75 apples will appear on the screen you lose",
     "thirdInfo": "Appearing speed of apple per difficulty:",
     "easyLevel": "Easy: ",
     "mediumLevel": "Medium: ",

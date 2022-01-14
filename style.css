@@ -237,3 +237,15 @@ button:active,
   font-size: 34px;
   transition: transform;
 }
+
+.restart-wrap {
+  height: 100vh;
+  width: 100vw;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.restart {
+  z-index: 20;
+}

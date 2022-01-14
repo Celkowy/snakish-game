@@ -10,6 +10,8 @@ const MODE = document.querySelector('.mode')
 const MORE_INFO_POPUP = document.querySelector('.more-info-popup')
 const CLOSE_MORE_INFO_POPUP = document.querySelector('.close-more-info-popup')
 const HIGHEST_SCORE = document.querySelector('.highest-score')
+const RESTART_WRAP = document.querySelector('.restart-wrap')
+const RESTART_BUTTON = document.querySelector('.restart')
 let pResult = document.querySelector('.result')
 
 const enemyTable = []
@@ -192,7 +194,7 @@ function startGame() {
   }
 }
 
-const player = new Player(fieldSize, fieldSize, 0, 0)
+let player = new Player(fieldSize, fieldSize, 0, 0)
 player.square.style.display = 'none'
 
 function createEnemy() {
@@ -205,15 +207,18 @@ function createEnemy() {
         show = false
         player.square.remove()
         compareScore(result, 'highestScoreSurvival')
+        RESTART_WRAP.style.display = 'flex'
         break
       }
     } else {
-      if (YOUR_TIME.textContent === 'Time 00:00' || enemyTable.length >= 90) {
+      if (YOUR_TIME.textContent === 'Time 00:00' || enemyTable.length >= 75) {
         timer.stop()
         player.square.style.display = 'none'
         show = false
         player.square.remove()
         compareScore(result, 'highestScoreCollector')
+        //add class here
+        RESTART_WRAP.style.display = 'flex'
         break
       }
     }
@@ -226,6 +231,10 @@ function createEnemy() {
     break
   }
 }
+
+RESTART_BUTTON.addEventListener('click', () => {
+  window.location.reload()
+})
 
 //sets initial score value to 0
 //checks if scored result is higher than personal best
@@ -251,7 +260,7 @@ const levelRules = {
     easy: 500,
     medium: 350,
     hard: 250,
-    insane: 125,
+    insane: 200,
   },
 }
 
