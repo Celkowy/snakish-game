@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./img/snake.png" />
     <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
+    <title>snakish-game</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
@@ -23,11 +24,11 @@
 
         <div class="sections">
           <div class="survival section">
-            <button onClick="chooseMode('survival')">Survival</button>
+            <button onclick="chooseMode('survival')">Survival</button>
             <p>Survive as long as you can</p>
           </div>
           <div class="collector section">
-            <button onClick="chooseMode('collector')">Collector</button>
+            <button onclick="chooseMode('collector')">Collector</button>
             <p>Collect as much as you can within 25 seconds</p>
           </div>
         </div>
@@ -52,6 +53,10 @@
     </div>
 
     <div class="wrap">
+      <div class="highest-score-wrapper">
+        <span>Highest score:&nbsp;</span>
+        <div class="highest-score"></div>
+      </div>
       <div class="mode-wrapper">
         <span>Mode:&nbsp;</span>
         <div class="mode"></div>

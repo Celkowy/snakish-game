@@ -9,6 +9,7 @@ const LEVEL_DIFFICULTY = document.querySelector('.level-difficulty')
 const MODE = document.querySelector('.mode')
 const MORE_INFO_POPUP = document.querySelector('.more-info-popup')
 const CLOSE_MORE_INFO_POPUP = document.querySelector('.close-more-info-popup')
+const HIGHEST_SCORE = document.querySelector('.highest-score')
 let pResult = document.querySelector('.result')
 
 const enemyTable = []
@@ -17,7 +18,7 @@ let enemyInterval = 350
 const squareTable = []
 let show = true
 
-LEVEL_DIFFICULTY.textContent = `${getDifficulty()}`
+LEVEL_DIFFICULTY.textContent = `${getLocalStorageProperty('Easy', 'difficulty')}`
 
 let windowWidth = window.matchMedia('(max-width: 1024px)')
 let fieldSize = 30
@@ -32,7 +33,7 @@ const gameMode = {
 SETTINGS.addEventListener('click', () => {
   SETTINGS_POPUP.classList.toggle('hide')
   START_BOARD.classList.toggle('hide')
-  LEVEL_DIFFICULTY.textContent = `${getDifficulty()}`
+  LEVEL_DIFFICULTY.textContent = `${getLocalStorageProperty('Easy', 'difficulty')}`
   checkColor()
 })
 
@@ -46,7 +47,7 @@ CLOSE_MORE_INFO_POPUP.addEventListener('click', () => {
 })
 
 function checkColor() {
-  LEVEL_DIFFICULTY.className = `level-difficulty ${getDifficulty().toLowerCase()}`
+  LEVEL_DIFFICULTY.className = `level-difficulty ${getLocalStorageProperty('Easy', 'difficulty').toLowerCase()}`
 }
 
 var timer = new Timer()
@@ -54,7 +55,7 @@ checkColor()
 
 function changeDifficulty(arg) {
   saveToLocalstorage('difficulty', arg)
-  LEVEL_DIFFICULTY.textContent = ` ${getDifficulty()}`
+  LEVEL_DIFFICULTY.textContent = ` ${getLocalStorageProperty('Easy', 'difficulty')}`
   checkColor()
   SETTINGS_POPUP.classList.toggle('hide')
   START_BOARD.classList.toggle('hide')
@@ -134,8 +135,10 @@ function playSound() {
 const chooseMode = mode => {
   if (mode === 'survival') {
     gameMode.mode = 'survival'
+    HIGHEST_SCORE.textContent = localStorage.highestScoreSurvival
   } else if (mode === 'collector') {
     YOUR_TIME.innerHTML = `Time 00:25`
+    HIGHEST_SCORE.textContent = localStorage.highestScoreCollector
     gameMode.mode = 'collector'
   }
   MODE.innerHTML = `${gameMode.mode}`
@@ -144,7 +147,7 @@ const chooseMode = mode => {
   BOARD.style.display = 'flex'
   player.square.style.display = 'block'
   startTimer()
-  startGame(getDifficulty())
+  startGame(getLocalStorageProperty('Easy', 'difficulty'))
 }
 
 function startTimer() {
@@ -178,7 +181,7 @@ function startGame() {
   if (gameMode.mode === 'survival') {
   } else {
     clearInterval(myInterval)
-    myInterval = setInterval(createEnemy, difficultyLevel(getDifficulty()))
+    myInterval = setInterval(createEnemy, difficultyLevel(getLocalStorageProperty('Easy', 'difficulty')))
   }
 
   for (i = 0; i < 100; i++) {
@@ -194,12 +197,12 @@ function createEnemy() {
   while (true) {
     let random = Math.floor(Math.random() * 100)
     if (gameMode.mode === 'survival') {
-      if (enemyTable.length == difficultyLevel(getDifficulty())) {
+      if (enemyTable.length == difficultyLevel(getLocalStorageProperty('Easy', 'difficulty'))) {
         timer.stop()
         player.square.style.display = 'none'
         show = false
         player.square.remove()
-        saveToLocalstorage('highestScoreSurvival', result)
+        getLocalStorageProperty(result, 'highestScoreSurvival')
         break
       }
     } else {
@@ -208,7 +211,7 @@ function createEnemy() {
         player.square.style.display = 'none'
         show = false
         player.square.remove()
-        saveToLocalstorage('highestScoreCollector', result)
+        getLocalStorageProperty(result, 'highestScoreCollector')
         break
       }
     }
@@ -224,15 +227,15 @@ function createEnemy() {
 
 const levelRules = {
   survival: {
-    easy: 30,
-    medium: 25,
+    easy: 40,
+    medium: 30,
     hard: 20,
     insane: 10,
   },
   collector: {
-    easy: 300,
-    medium: 225,
-    hard: 175,
+    easy: 500,
+    medium: 350,
+    hard: 250,
     insane: 125,
   },
 }
@@ -242,12 +245,15 @@ function difficultyLevel(lv) {
   return levelRules[gameMode.mode][level]
 }
 
-function getDifficulty() {
-  const def = 'Easy'
-  const item = localStorage.getItem('difficulty')
+function getLocalStorageProperty(initialValue, propertyName) {
+  const item = localStorage.getItem(propertyName)
   if (item == null) {
-    saveToLocalstorage('difficulty', def)
-    return def
+    saveToLocalstorage(propertyName, initialValue)
+    return initialValue
+  } else if (propertyName === 'highestScoreCollector' || propertyName === 'highestScoreSurvival') {
+    if (result > item) {
+      saveToLocalstorage(propertyName, initialValue)
+    }
   }
   return item
 }
@@ -258,11 +264,11 @@ function saveToLocalstorage(name, value) {
 
 async function openPopup(mode) {
   const response = await fetch('popupContent.json')
-  const data = await response.json()
+  const popupData = await response.json()
 
   MORE_INFO_POPUP.classList.add('show')
   SETTINGS.hidden = true
-  assignElements(data[mode], mode)
+  assignElements(popupData[mode], mode)
 }
 
 function assignElements(
@@ -287,7 +293,7 @@ function assignElements(
   INSANE_LEVEL.textContent = insaneLevel + levelRules[mode].insane + `${mode === 'collector' ? 'ms' : ''}`
 }
 
+//info you lost
 //restart jak przegrasz
 //ile max może byc na ekranie w trakcie grania w dany tryb
 //przeglądnij nazwy
-//wyświetlanie najlepszego scora obok scora z rozróżnieniem trybów gry, zapisywanie highest scora w localStorage

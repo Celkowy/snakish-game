@@ -160,7 +160,8 @@ button:active,
 }
 
 .level-difficulty-wrap,
-.mode-wrapper {
+.mode-wrapper,
+.highest-score-wrapper {
   display: flex;
   width: 100%;
 }
