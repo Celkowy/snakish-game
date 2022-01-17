@@ -155,7 +155,7 @@ const chooseMode = mode => {
 function setInitialValueAndDisplayScore() {
   compareScore(
     `highestScore${gameMode.mode[0].toUpperCase() + gameMode.mode.slice(1) + getLocalStorageProperty('difficulty')}`,
-    '0'
+    result
   )
 
   HIGHEST_SCORE.textContent = getLocalStorageProperty(
@@ -255,7 +255,7 @@ RESTART_BUTTON.addEventListener('click', () => {
 //sets initial score value to 0
 //checks if scored result is higher than personal best
 function compareScore(propertyName, score) {
-  if (getLocalStorageProperty(propertyName, '') == null) {
+  if (!getLocalStorageProperty(propertyName, '')) {
     saveToLocalstorage(propertyName, 0)
   } else {
     let highestScore = localStorage.getItem(propertyName)
@@ -328,3 +328,5 @@ function assignElements(
   HARD_LEVEL.textContent = hardLevel + levelRules[mode].hard + `${mode === 'collector' ? 'ms' : ''}`
   INSANE_LEVEL.textContent = insaneLevel + levelRules[mode].insane + `${mode === 'collector' ? 'ms' : ''}`
 }
+
+//check second arguments
