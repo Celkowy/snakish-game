@@ -229,7 +229,7 @@ function createEnemy() {
       RESTART_WRAP.style.display = 'flex'
     }
   } else {
-    if (YOUR_TIME.textContent === 'Time 00:00' || enemyTable.length >= 5) {
+    if (YOUR_TIME.textContent === 'Time 00:00' || enemyTable.length >= 75) {
       clearInterval(myInterval)
       timer.stop()
       player.square.style.display = 'none'
