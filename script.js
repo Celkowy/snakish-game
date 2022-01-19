@@ -87,10 +87,8 @@ class Player extends Fields {
 
     this.square.style.position = 'absolute'
     this.square.style.backgroundImage = 'url(img/snake.png)'
-
-    let size = this.square.style.width[0] + this.square.style.width[1] - 1
-    this.square.style.width = `${size}px`
-    this.square.style.height = `${size}px`
+    this.square.style.width = `${width - 1}px`
+    this.square.style.height = `${height - 1}px`
 
     window.addEventListener('keydown', event => {
       if (event.key === 'ArrowRight' || event.key === 'd') {
