@@ -68,7 +68,7 @@ class Fields {
   constructor(width, height, x, y) {
     this.width = width
     this.height = height
-    
+
     const square = document.createElement('div')
     this.audio = document.createElement('audio')
     this.audio.src = './sound/yummy.mp3'
@@ -119,7 +119,6 @@ class Player extends Fields {
 
       enemyTable.forEach((enemy, index) => {
         if (show && player.x === enemy.x && player.y === enemy.y) {
-          console.log(enemy)
           enemy.square.style.backgroundColor = '#4dc1f9'
           enemy.square.style.backgroundImage = ''
           enemyTable.splice(index, 1)
