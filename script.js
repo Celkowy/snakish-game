@@ -328,5 +328,3 @@ function assignElements(
   HARD_LEVEL.textContent = hardLevel + levelRules[mode].hard + `${mode === 'collector' ? 'ms' : ''}`
   INSANE_LEVEL.textContent = insaneLevel + levelRules[mode].insane + `${mode === 'collector' ? 'ms' : ''}`
 }
-
-//check second arguments
